@@ -47,7 +47,6 @@ const schema = yup.object({
 const UpdateProfile = () => {
   const isFocused = useIsFocused()
   const theme = useColorScheme()
-  console.log(theme)
   const navigation = useNavigation()
   const currentUserUid = auth().currentUser?.uid
   const {
@@ -121,8 +120,6 @@ const UpdateProfile = () => {
     }
   }
 
-  console.log(watch('photo'), watch('coverPhoto'))
-
   const selectImage = (type: string) => {
     launchImageLibrary({ mediaType: 'photo' }, (response: any) => {
       try {
@@ -154,9 +151,6 @@ const UpdateProfile = () => {
 
     try {
       const document = fireStore().collection('Users').doc(currentUserUid)
-
-      console.log('Photo', photo === watch('photo'))
-      console.log('Cover photo', coverPhoto === watch('coverPhoto'))
       if (photo !== watch('photo')) {
       }
       if (coverPhoto !== watch('coverPhoto')) {
@@ -166,7 +160,6 @@ const UpdateProfile = () => {
       if (photo !== watch('photo')) {
         await uploadImage(watch('photo'), 'profile')
       }
-      console.log(details, data, 'aaabbbbb')
       await document.set({
         ...details,
         ...data,

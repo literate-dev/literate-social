@@ -35,7 +35,6 @@ const SeeProfile = () => {
     useState<FirebaseFirestoreTypes.DocumentData>()
   const navigation: ScreenNavigationProp = useNavigation()
   const isFocused = useIsFocused()
-   console.log(route.params, auth().currentUser?.uid)
   const getUserDetails = async () => {
     try {
       const userId = paramsUserId ? paramsUserId : auth().currentUser?.uid

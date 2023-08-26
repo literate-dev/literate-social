@@ -24,6 +24,9 @@ import UploadQrCodeScanner from './src/screens/UploadQrCodeScanner'
 import { colors } from './src/constants/colors'
 import MaterialCommunity from 'react-native-vector-icons/MaterialCommunityIcons'
 import SeeProfile from './src/screens/SeeProfile'
+import { GoogleSignin } from '@react-native-google-signin/google-signin'
+import { useAppDispatch } from './src/redux/hooks'
+import { authActions } from './src/redux/slices/authSlice'
 
 const Stack = createStackNavigator()
 
@@ -53,12 +56,31 @@ const Header = ({
 }
 
 const ProfileNavigations = () => {
+  const dispatch = useAppDispatch()
   const onClickOnLogout = async (navigation: any) => {
+    dispatch(authActions.logoutLoading(true))
+    const navigateOnSuccessLogout = () => {
+      Toast.show({ type: 'success', text1: 'Successfully Logged Out' })
+      navigation.replace('Login')
+    }
+    const user = auth().currentUser?.providerData[0].providerId
     await auth()
       .signOut()
-      .then(() => {
-        Toast.show({ type: 'success', text1: 'Successfully Logged Out' })
-        navigation.replace('Login')
+      .then(async () => {
+        if (user === 'google.com') {
+          await GoogleSignin.signOut()
+            .then((res) => {
+              navigateOnSuccessLogout()
+            })
+            .catch((err) => {
+              Toast.show({ type: 'error', text1: 'Failed to logout' })
+            }).finally(() => {
+              dispatch(authActions.logoutLoading(false))
+            })
+        } else {
+          dispatch(authActions.logoutLoading(false))
+          navigateOnSuccessLogout()
+        }
       })
       .catch((error) => {
         console.log(error)
@@ -85,11 +107,7 @@ const ProfileNavigations = () => {
         name="SeeProfile"
         component={SeeProfile}
         options={{
-          header: ({ navigation }) => (
-            <Header
-              title="Details"
-            />
-          ),
+          header: ({ navigation }) => <Header title="Details" />,
         }}
       />
       <Stack.Screen
@@ -113,7 +131,6 @@ const BottomTabs = () => {
         tabBarShowLabel: false,
         tabBarActiveTintColor: colors.white,
         tabBarIcon: ({ focused, color, size }) => {
-          console.log(route)
           //  return <Text>{route.name}</Text>
           switch (route.name) {
             case 'Profile':

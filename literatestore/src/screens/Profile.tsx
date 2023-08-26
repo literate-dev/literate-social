@@ -24,17 +24,19 @@ import facebook from '../assets/facebook.png'
 import instagram from '../assets/instagram.png'
 import twitter from '../assets/twitter.png'
 import website from '../assets/website.png'
+import Loading from '../../src/components/Loading'
+import { useAppSelector } from '../../src/redux/hooks'
 
 const { height, width } = Dimensions.get('window')
 
 const Profile = () => {
   const route = useRoute()
+  const logoutLoading = useAppSelector((state) => state.auth.logoutLoading)
   const paramsUserId = _.get(route, 'params.userId')
   const [userDetails, setUserDetails] =
     useState<FirebaseFirestoreTypes.DocumentData>()
   const navigation: ScreenNavigationProp = useNavigation()
   const isFocused = useIsFocused()
-
   const getUserDetails = async () => {
     try {
       const userId = paramsUserId ? paramsUserId : auth().currentUser?.uid
@@ -62,83 +64,93 @@ const Profile = () => {
 
   return (
     <Protected>
-      <View style={styles.container}>
+      {logoutLoading ? (
+        <View style={styles.container}>
+          <Loading />
+        </View>
+      ) : (
+        <View style={styles.container}>
           <TouchableOpacity
             activeOpacity={0.5}
             style={styles.editContainer}
             onPress={handleNavigateToUpdateProfile}
           >
-            <Feather name="edit" style={styles.editIcon} color={colors.black}/>
+            <Feather name="edit" style={styles.editIcon} color={colors.black} />
           </TouchableOpacity>
-        <View style={styles.wrapperProfile}>
-          <ImageBackground
-            source={
-              _.get(userDetails, 'coverPhoto', '')
-                ? { uri: _.get(userDetails, 'coverPhoto', '') }
-                : require('../assets/sampleBackgroundImage.jpg')
-            }
-            style={styles.coverImageBackground}
-          />
-          <View style={styles.profileImageContainer}>
-            <View style={styles.profileImage}>
-              {_.get(userDetails, 'photo', '') ? (
-                <Image
-                  style={styles.profileImageData}
-                  source={{ uri: _.get(userDetails, 'photo', '') }}
-                />
-              ) : null}
+          <View style={styles.wrapperProfile}>
+            <ImageBackground
+              source={
+                _.get(userDetails, 'coverPhoto', '')
+                  ? { uri: _.get(userDetails, 'coverPhoto', '') }
+                  : require('../assets/sampleBackgroundImage.jpg')
+              }
+              style={styles.coverImageBackground}
+            />
+            <View style={styles.profileImageContainer}>
+              <View style={styles.profileImage}>
+                {_.get(userDetails, 'photo', '') ? (
+                  <Image
+                    style={styles.profileImageData}
+                    source={{ uri: _.get(userDetails, 'photo', '') }}
+                  />
+                ) : null}
+              </View>
             </View>
-          </View>
-          <View style={styles.userDetails}>
-            <View style={styles.infoContent}>
-              <Text style={{ ...styles.name, ...styles.textWhite }}>
-                {_.get(userDetails, 'name', '')}
-              </Text>
-              <Text style={{ ...styles.email, ...styles.textWhite }}>
-                {_.get(userDetails, 'email', '')}
-              </Text>
-            </View>
-            <View style={styles.iconContainer}>
-              {_.get(userDetails, 'facebook') ? (
-                <TouchableOpacity
-                  style={styles.imageIcon}
-                  onPress={() =>
-                    Linking.openURL(_.get(userDetails, 'facebook'))
-                  }
-                >
-                  <Image source={facebook} style={styles.imagePngIcon} />
-                </TouchableOpacity>
-              ) : null}
-              {_.get(userDetails, 'twitter') ? (
-                <TouchableOpacity
-                  style={styles.imageIcon}
-                  onPress={() => Linking.openURL(_.get(userDetails, 'twitter'))}
-                >
-                  <Image source={twitter} style={styles.imagePngIcon} />
-                </TouchableOpacity>
-              ) : null}
-              {_.get(userDetails, 'instagram') ? (
-                <TouchableOpacity
-                  style={styles.imageIcon}
-                  onPress={() =>
-                    Linking.openURL(_.get(userDetails, 'instagram'))
-                  }
-                >
-                  <Image source={instagram} style={styles.imagePngIcon} />
-                </TouchableOpacity>
-              ) : null}
-              {_.get(userDetails, 'website') ? (
-                <TouchableOpacity
-                  style={styles.imageIcon}
-                  onPress={() => Linking.openURL(_.get(userDetails, 'website'))}
-                >
-                  <Image source={website} style={styles.imagePngIcon} />
-                </TouchableOpacity>
-              ) : null}
+            <View style={styles.userDetails}>
+              <View style={styles.infoContent}>
+                <Text style={{ ...styles.name, ...styles.textWhite }}>
+                  {_.get(userDetails, 'name', '')}
+                </Text>
+                <Text style={{ ...styles.email, ...styles.textWhite }}>
+                  {_.get(userDetails, 'email', '')}
+                </Text>
+              </View>
+              <View style={styles.iconContainer}>
+                {_.get(userDetails, 'facebook') ? (
+                  <TouchableOpacity
+                    style={styles.imageIcon}
+                    onPress={() =>
+                      Linking.openURL(_.get(userDetails, 'facebook'))
+                    }
+                  >
+                    <Image source={facebook} style={styles.imagePngIcon} />
+                  </TouchableOpacity>
+                ) : null}
+                {_.get(userDetails, 'twitter') ? (
+                  <TouchableOpacity
+                    style={styles.imageIcon}
+                    onPress={() =>
+                      Linking.openURL(_.get(userDetails, 'twitter'))
+                    }
+                  >
+                    <Image source={twitter} style={styles.imagePngIcon} />
+                  </TouchableOpacity>
+                ) : null}
+                {_.get(userDetails, 'instagram') ? (
+                  <TouchableOpacity
+                    style={styles.imageIcon}
+                    onPress={() =>
+                      Linking.openURL(_.get(userDetails, 'instagram'))
+                    }
+                  >
+                    <Image source={instagram} style={styles.imagePngIcon} />
+                  </TouchableOpacity>
+                ) : null}
+                {_.get(userDetails, 'website') ? (
+                  <TouchableOpacity
+                    style={styles.imageIcon}
+                    onPress={() =>
+                      Linking.openURL(_.get(userDetails, 'website'))
+                    }
+                  >
+                    <Image source={website} style={styles.imagePngIcon} />
+                  </TouchableOpacity>
+                ) : null}
+              </View>
             </View>
           </View>
         </View>
-      </View>
+      )}
     </Protected>
   )
 }

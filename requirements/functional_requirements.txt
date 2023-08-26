@@ -1,0 +1,20 @@
+Screens : 
+1. Login Screen : 
+  login should be on the basis of  : 
+  a. email and password
+  b. phone number and OTP
+  c. social logins such as google, facebook, twitter and github
+  
+2. SignUp screen based on email and password
+3. Splash screen to show when the app is loading
+4. Home Screen / Profile Screen 
+	a. Show user details such as profile pic , status (in terms of image, text and video) and icons with links which users can add to their social profile
+		like youtube , linkedin, twitter, instagram , github and any generic website user wants to add
+    b. An icon button to scan the QR code 
+	c. A button to add the status .
+	
+5. Settings Page : the settings page should be per user basis . Any user should be able to add the social logins through this page and also
+                    a button to hide/show his profile to other users.
+					Settings page will also have a section which shows all the ids linked to his/her profile. User should also have the ability to 
+					delete and all new ids to his profile.
+	 

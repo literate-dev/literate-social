@@ -1,0 +1,3 @@
+interface IProfileModal {
+    details: any
+}

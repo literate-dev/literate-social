@@ -2,6 +2,8 @@ import React from 'react'
 import {
   StyleSheet,
   Text,
+  View,
+  Dimensions
 } from 'react-native'
 import fireStore from '@react-native-firebase/firestore'
 import auth from '@react-native-firebase/auth'
@@ -12,6 +14,7 @@ import _ from 'lodash'
 import { useAppDispatch } from '../redux/hooks'
 import { modalActions } from '../redux/slices/modalSlice'
 
+const {width} = Dimensions.get('window')
 const SearchQrCodeScanner = () => {
   const navigation:ScreenNavigationProp = useNavigation()
   const dispatch = useAppDispatch()
@@ -69,15 +72,24 @@ const SearchQrCodeScanner = () => {
 
   return (
     <QRCodeScanner
+      showMarker
+      markerStyle={{borderColor: 'white', borderStyle: "dashed"}}
       onRead={onSuccess}
       vibrate={true}
       reactivate
       reactivateTimeout={1000}
       topContent={
         <Text style={styles.centerText}>
-          Scan <Text style={styles.textBold}>QR_code</Text>
+          Scan <Text style={styles.textBold}>QR_code </Text>
           To get the user details
         </Text>
+      }
+      bottomContent={
+        <View style={styles.bottomTextContainer}>
+          <Text style={styles.bottomText}>
+           <Text style={styles.note}>Note:</Text> Searching qr code information in our records. Please wait...
+          </Text>
+        </View>
       }
     />
   )
@@ -103,4 +115,17 @@ const styles = StyleSheet.create({
   buttonTouchable: {
     padding: 16,
   },
+  note: {
+    fontWeight:'bold',
+ 
+   },
+   bottomText: {
+     color: 'black',
+     width: width * 0.6,
+     textAlign:'center'
+   },
+   bottomTextContainer: {
+     flexDirection:'row',
+     justifyContent:'center',
+   }
 })

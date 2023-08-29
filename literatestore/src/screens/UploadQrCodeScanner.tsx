@@ -1,8 +1,5 @@
 import React from 'react'
-import {
-  StyleSheet,
-  Text,
-} from 'react-native'
+import { StyleSheet, Text, Dimensions,View } from 'react-native'
 import fireStore from '@react-native-firebase/firestore'
 import auth from '@react-native-firebase/auth'
 import QRCodeScanner from 'react-native-qrcode-scanner'
@@ -11,6 +8,7 @@ import { useNavigation, useRoute } from '@react-navigation/native'
 import _ from 'lodash'
 import { useAppDispatch } from '../redux/hooks'
 
+const { width } = Dimensions.get('window')
 const UploadQrCodeScanner = () => {
   const navigation = useNavigation()
 
@@ -55,13 +53,22 @@ const UploadQrCodeScanner = () => {
     <QRCodeScanner
       onRead={onSuccess}
       vibrate={true}
+      showMarker
+      markerStyle={{ borderColor: 'white', borderStyle: 'dashed' }}
       reactivate
       reactivateTimeout={3000}
       topContent={
         <Text style={styles.centerText}>
-          Scan <Text style={styles.textBold}>QR_code</Text>
+          Scan <Text style={styles.textBold}>QR_code </Text>
           To update the user
         </Text>
+      }
+      bottomContent={
+        <View style={styles.bottomTextContainer}>
+          <Text style={styles.bottomText}>
+            <Text style={styles.note}>Note: </Text> Scan QR code information will save in our records. Please wait...
+          </Text>
+        </View>
       }
     />
   )
@@ -86,4 +93,17 @@ const styles = StyleSheet.create({
   buttonTouchable: {
     padding: 16,
   },
+  note: {
+   fontWeight:'bold',
+
+  },
+  bottomText: {
+    color: 'black',
+    width: width * 0.6,
+    textAlign:'center'
+  },
+  bottomTextContainer: {
+    flexDirection:'row',
+    justifyContent:'center',
+  }
 })

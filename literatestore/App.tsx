@@ -27,10 +27,12 @@ import SeeProfile from './src/screens/SeeProfile'
 import { GoogleSignin } from '@react-native-google-signin/google-signin'
 import { useAppDispatch } from './src/redux/hooks'
 import { authActions } from './src/redux/slices/authSlice'
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 
 const Stack = createStackNavigator()
+const Tab = createMaterialTopTabNavigator();
 
-const Tab = createBottomTabNavigator()
+// const Tab = createBottomTabNavigator()
 
 const { height, width } = Dimensions.get('window')
 
@@ -126,9 +128,13 @@ const ProfileNavigations = () => {
 const BottomTabs = () => {
   return (
     <Tab.Navigator
+      tabBarPosition='bottom'
       screenOptions={({ route, navigation }) => ({
         tabBarStyle: { backgroundColor: colors.black1 },
         tabBarShowLabel: false,
+        tabBarIndicatorStyle: {
+          backgroundColor:'white'
+        },
         tabBarActiveTintColor: colors.white,
         tabBarIcon: ({ focused, color, size }) => {
           //  return <Text>{route.name}</Text>
@@ -138,7 +144,7 @@ const BottomTabs = () => {
                 <MaterialCommunity
                   name={'account-circle'}
                   color={focused ? colors.white : colors.white1}
-                  size={28}
+                  size={25}
                 />
               )
             case 'SearchWithQrCodeScanner':
@@ -146,7 +152,7 @@ const BottomTabs = () => {
                 <MaterialCommunity
                   name={'qrcode-scan'}
                   color={focused ? colors.white : colors.white1}
-                  size={28}
+                  size={25}
                 />
               )
             case 'UploadQrCodeScanner':
@@ -154,7 +160,7 @@ const BottomTabs = () => {
                 <MaterialCommunity
                   name={'qrcode'}
                   color={focused ? colors.white : colors.white1}
-                  size={28}
+                  size={25}
                 />
               )
             default:

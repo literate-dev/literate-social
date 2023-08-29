@@ -82,6 +82,8 @@ const QRScanner = () => {
         <QRCodeScanner
             onRead={onSuccess}
             vibrate={true}
+            showMarker
+            markerStyle={{borderColor: 'white', borderStyle: "dashed"}}
             reactivate
             reactivateTimeout={1000}
             topContent={
